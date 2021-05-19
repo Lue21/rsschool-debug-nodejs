@@ -1,0 +1,46 @@
+3 пункт самопроверки в PR:
+
+
+Найденные ошибки компиляции
+
+<описание ошибки>. <описание исправления>. Исправлена(ы) строка(и) <номер(а) строк> в файле <относительный путь к файлу из корневой папки> ...
+
+1. ReferenceError: Router is not defined - Вызов необъявленной функции Router() в строке 1 файла 'usercontroller.js'
+Был подключен модуль 'express' для вызова функции Router()
+Исправлена строка 1 в файле 'usercontroller.js' - стало "require('express').Router();"
+
+2. Error: Cannot find module 'bcrypt' - Не найден модуль 'bcrypt' в строке 2 файла 'usercontroller.js'
+Была выполнена установка модуля 'bcrypt'
+
+3. TypeError: require(...).import is not a function - Обращение к неизвестной import в строке 5 файла 'usercontroller.js'
+Был выполнен экспорт объекта sequelize из модуля 'db.js'
+Добавлена строка "module.exports = sequelize;" в конец файла 'db.js'
+
+4. SyntaxError: Function statements require a function name - объявление функции без имени в строке 1 файла 'game.js'
+Функция была объявлена как экспортируемая из модуля 'game.js'
+Исправлена строка 1 в файле 'game.js' - стало "module.exports = function(sequelize, DataTypes) {"
+
+5. ReferenceError: routers is not defined - экспорт неопределенной переменной routers в строке 116 файла 'gamecontroller.js'
+Было исправлено имя экспортируемого объекта в модуле 'gamecontroller.js'
+Исправлена строка 116 в файле 'gamecontroller.js'  стало "module.exports = router;"
+
+6. TypeError: require(...).import is not a function - вызов неопределенной функции в строке 2 файла 'validate-session.js'
+Вместо модуля 'sequelize' подключен локальный 'db.js'
+Исправлена строка 2 в файле 'validate-session.js' - стало "var User = require('../db').import('../models/user');"
+
+
+
+
+Найденные ошибки логики приложения
+
+<описание ошибки>. <описание исправления>. Исправлена(ы) строка(и) <номер(а) строк> в файле <относительный путь к файлу из корневой папки> ...
+
+
+
+
+
+Рефактор кода
+изменена строка 1 в файле usercontroller.js
+было ""
+стало "require('express').Router();"
+<Описание, что было изменено>
