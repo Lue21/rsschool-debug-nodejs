@@ -1,11 +1,12 @@
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
 
-var db = require('./db');
-var user = require('./controllers/usercontroller');
-var game = require('./controllers/gamecontroller')
+const db = require('./db');
+const user = require('./controllers/usercontroller');
+const game = require('./controllers/gamecontroller')
 
-db.sync();
+db.sync()
+.catch(err => console.log(err));
 
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());

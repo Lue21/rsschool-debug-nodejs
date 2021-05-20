@@ -4,17 +4,14 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         },
-
         username: {
             type: DataTypes.STRING,
             allowNull: false
         },
-
         passwordHash: {
             type: DataTypes.STRING,
             allowNull: false
         },
-
         email: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -23,4 +20,4 @@ module.exports = function(sequelize, DataTypes) {
             }
         }
     })
-}
+};
