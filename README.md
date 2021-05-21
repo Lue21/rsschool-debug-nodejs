@@ -1,9 +1,9 @@
 # rsschool-debug-nodejs
 Debug in Node.js
 
-self-esteem:
+## Описание выполненных работ
 
-Найденные ошибки компиляции
+### Найденные ошибки компиляции
 
 <описание ошибки>. <описание исправления>. Исправлена(ы) строка(и) <номер(а) строк> в файле <относительный путь к файлу из корневой папки> ...
 
@@ -14,11 +14,11 @@ self-esteem:
 2. Error: Cannot find module 'bcrypt' - Не найден модуль 'bcrypt' в строке 2 файла 'usercontroller.js'
 Была выполнена установка модуля 'bcrypt'
 
-3. TypeError: require(...).import is not a function - Обращение к неизвестной import в строке 5 файла 'usercontroller.js'
-Был выполнен экспорт объекта sequelize из модуля 'db.js'
+3. TypeError: require(...).import is not a function - Обращение к неизвестной функции 'import' в строке 5 файла 'usercontroller.js'
+Был выполнен экспорт объекта 'sequelize' из модуля 'db.js'
 Добавлена строка "module.exports = sequelize;" в конец файла 'db.js'
 
-4. SyntaxError: Function statements require a function name - объявление функции без имени в строке 1 файла 'game.js'
+4. SyntaxError: Function statements require a function name - отсутствует экспорт функции в строке 1 файла 'game.js'
 Функция была объявлена как экспортируемая из модуля 'game.js'
 Исправлена строка 1 в файле 'game.js' - стало "module.exports = function(sequelize, DataTypes) {"
 
@@ -27,32 +27,30 @@ self-esteem:
 Исправлена строка 116 в файле 'gamecontroller.js'  стало "module.exports = router;"
 
 6. TypeError: require(...).import is not a function - вызов неопределенной функции в строке 2 файла 'validate-session.js'
-Вместо модуля 'sequelize' подключен локальный 'db.js'
+Вместо модуля 'sequelize' подключен локальный модуль 'db.js'
 Исправлена строка 2 в файле 'validate-session.js' - стало "var User = require('../db').import('../models/user');"
 
-
-
-Найденные ошибки логики приложения
+### Найденные ошибки логики приложения
 
 <описание ошибки>. <описание исправления>. Исправлена(ы) строка(и) <номер(а) строк> в файле <относительный путь к файлу из корневой папки> ...
 
-1. Не задан порт доступа к БД
+1. Не задан порт доступа к БД при инициализации объекта 'sequelize' в файле 'db.js'
 Добавлен параметр 'DB_PORT' в файл '.env' - "DB_PORT=5433"
-Добавлена строка в позицию 10 файла 'db.js' инициализации объекта 'sequelize' - "port: process.env.DB_PORT,"
+Добавлена строка в блок инициализации 'sequelize' (строки 3-5) в файле 'db.js' - "port: process.env.DB_PORT,"
 
-2. Не задан порт соединения при запуске сервера Express  в файле 'app.js'
+2. Не задан порт соединения при запуске сервера Express в файле 'app.js'
 Добавлен параметр 'APP_PORT' в файл '.env' - "APP_PORT=4000"
-Исправлена строка 13 в файле 'app.js' - "app.listen(process.env.APP_PORT, function() {"
+Исправлена строка 14 в файле 'app.js' - "app.listen(process.env.APP_PORT, function() {"
 
-3. Не вызывается функция sequelize.authenticate() в файле 'db.js' строка 15
-Выполена переустановка пакета 'pg'
+3. Не вызывается функция sequelize.authenticate() в файле 'db.js' строка 8
+Выполена переустановка пакета 'pg' (пакет удален и установлен заново через 'npm')
 
-4. Не подключен парсер JSON даных из body запроса в файле 'app.js'
-Вместо строки "app.use(require('body-parser'));"  добавлены строки 
-10 - "app.use(express.urlencoded({extended: false}));"
-11 - "app.use(express.json());"
+4. Не подключен парсер JSON даных из body запроса в файле 'app.js' строка 9
+Заменена строка 9 "app.use(require('body-parser'));"  на строки 
+11 - "app.use(express.urlencoded({extended: false}));"
+12 - "app.use(express.json());"
 
-5. Создается неописанное свойство 'passwordhash' для объекта 'User' в файле 'usercontroller.js' - для объекта описано свойство 'passwordHash' в файле 'user.js'
+5. Обращение к несуществующему свойству 'passwordhash' объекта 'User' в файле 'usercontroller.js' - объект User создатся со свойством 'passwordHash'
 Исправлена строка 11 в файле 'usercontroller.js' - "passwordHash: bcrypt.hashSync(req.body.user.password, 10),"
 
 6. Unhandled rejection ReferenceError: games is not defined - обращение к необъявленной переменной 'games' в строке 9 файла 'gamecontroller.js'
@@ -68,10 +66,14 @@ self-esteem:
 Исправлена строка 73 в файле 'gamecontroller.js' - "owner_id: req.user.id"
 
 
-Рефактор кода
+### Рефактор кода
 
 <Описание, что было изменено>
 
-1. Замена объявлений создания переменных с 'var' на 'const' или 'let'
-2. Замена объявлений функций на анонимные стрелочные, там где это допускается логикой работы приложения
-3. Добавления блока '.catch()' к строке синхронизации с БД (строка 8 в файле 'app.js')
+1. Все параметры подключения к БД задаются через константы, вынесенные в файл '.evn' из сооображений безопасности
+- Выполена установка пакета 'dotenv'
+- Создан файл '.env' с параметрами подключения к БД
+2. Замена объявлений создания переменных с 'var' на 'const' или 'let'
+3. Замена объявлений именованных функций на анонимные стрелочные, там где это допускается логикой работы приложения
+4. Добавления блока '.catch()' к строке синхронизации с БД (строка 8 в файле 'app.js')
+5. Отключено логгирование для модуля sequelize в файле 'db.js' - добавлена строка "logging: false," в блок инициализации объекта 'sequelize'
